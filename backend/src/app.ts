@@ -39,10 +39,20 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // API routes
 registerRoutes(app);
 
-// 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ message: "Not found" });
-});
+// Serve frontend in production
+if (process.env.NODE_ENV === "production") {
+  const frontendDist = path.join(__dirname, "../../frontend/dist");
+  app.use(express.static(frontendDist));
+  // SPA fallback — send index.html for any non-API route
+  app.get("*", (_req: Request, res: Response) => {
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+} else {
+  // 404 handler for API-only dev mode
+  app.use((_req: Request, res: Response) => {
+    res.status(404).json({ message: "Not found" });
+  });
+}
 
 // Global error handler
 app.use((err: Error & { status?: number; statusCode?: number }, _req: Request, res: Response, _next: NextFunction) => {

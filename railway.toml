@@ -1,0 +1,9 @@
+[build]
+buildCommand = "bash build.sh"
+
+[deploy]
+startCommand = "NODE_ENV=production node backend/dist/index.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

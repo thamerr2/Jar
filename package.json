@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev"
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
+    "start": "NODE_ENV=production node backend/dist/index.js"
   },
   "devDependencies": {
     "playwright": "^1.59.1"

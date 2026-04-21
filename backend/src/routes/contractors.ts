@@ -12,6 +12,14 @@ router.get("/", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+router.get("/me", authenticateToken, async (req, res, next) => {
+  try {
+    const contractor = await storage.getContractorByUserId(req.user!.id);
+    if (!contractor) { res.status(404).json({ message: "Contractor profile not found" }); return; }
+    res.json(contractor);
+  } catch (error) { next(error); }
+});
+
 router.get("/:id", async (req, res, next) => {
   try {
     const contractor = await storage.getContractor(req.params.id);
